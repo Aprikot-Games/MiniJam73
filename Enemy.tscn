@@ -1,0 +1,41 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Enemy.gd" type="Script" id=1]
+[ext_resource path="res://PNG/ufoRed.png" type="Texture" id=2]
+[ext_resource path="res://PNG/Lasers/laserRed09.png" type="Texture" id=3]
+[ext_resource path="res://PNG/Lasers/laserRed10.png" type="Texture" id=4]
+[ext_resource path="res://PNG/Lasers/laserRed11.png" type="Texture" id=5]
+[ext_resource path="res://PNG/Lasers/laserRed08.png" type="Texture" id=6]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 6 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), null ],
+"loop": false,
+"name": "Explosion",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 14.0736
+
+[node name="Enemy" type="RigidBody2D"]
+collision_layer = 2
+mode = 1
+gravity_scale = 0.0
+contacts_reported = 1
+contact_monitor = true
+script = ExtResource( 1 )
+
+[node name="Ship" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.3, 0.3 )
+frames = SubResource( 1 )
+animation = "Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+[connection signal="body_entered" from="." to="." method="_on_Enemy_body_entered"]

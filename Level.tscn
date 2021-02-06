@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Level.gd" type="Script" id=1]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Enemy.tscn" type="PackedScene" id=3]
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 1 )
+Enemy = ExtResource( 3 )
+
+[node name="Enemy" parent="." instance=ExtResource( 3 )]
+position = Vector2( 88, 32 )
+rotation = -0.0177552
+scale = Vector2( 1, 1 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 91.946, 271.893 )
+scale = Vector2( 0.3, 0.3 )
+
+[node name="SpawnTimer" type="Timer" parent="."]
+[connection signal="player_lose_live" from="Player" to="." method="_on_Player_player_lose_live"]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://PNG/UI/playerLife1_blue.png" type="Texture" id=1]
+
+[node name="Live" type="Sprite"]
+texture = ExtResource( 1 )

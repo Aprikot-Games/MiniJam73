@@ -1,0 +1,92 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Game.gd" type="Script" id=1]
+[ext_resource path="res://Live.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Level.tscn" type="PackedScene" id=3]
+
+[node name="Game" type="Node2D"]
+script = ExtResource( 1 )
+Live = ExtResource( 2 )
+Level = ExtResource( 3 )
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Msg" type="Label" parent="UI"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -166.706
+margin_top = 88.0309
+margin_right = 168.294
+margin_bottom = 102.031
+text = "GAME OVER"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OverTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="NotifyTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="DebugButtons" type="Node2D" parent="."]
+
+[node name="Startb" type="Button" parent="DebugButtons"]
+margin_left = 24.6095
+margin_top = 161.447
+margin_right = 78.6095
+margin_bottom = 190.447
+text = "Start"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Shootb" type="Button" parent="DebugButtons"]
+margin_left = 24.6095
+margin_top = 202.827
+margin_right = 78.6095
+margin_bottom = 231.827
+text = "Shoot"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Overb" type="Button" parent="DebugButtons"]
+margin_left = 95.3565
+margin_top = 160.78
+margin_right = 149.356
+margin_bottom = 189.78
+text = "Over"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AddLiveb" type="Button" parent="DebugButtons"]
+margin_left = 95.3565
+margin_top = 239.976
+margin_right = 149.356
+margin_bottom = 268.976
+text = "Add"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SubLiveb" type="Button" parent="DebugButtons"]
+margin_left = 25.3529
+margin_top = 240.683
+margin_right = 79.3524
+margin_bottom = 269.683
+text = "Sub"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="timeout" from="OverTimer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="NotifyTimer" to="." method="_on_NotifyTimer_timeout"]
+[connection signal="pressed" from="DebugButtons/Startb" to="." method="_on_Startb_pressed"]
+[connection signal="pressed" from="DebugButtons/Shootb" to="." method="_on_Shootb_pressed"]
+[connection signal="pressed" from="DebugButtons/Overb" to="." method="_on_Overb_pressed"]
+[connection signal="pressed" from="DebugButtons/AddLiveb" to="." method="_on_AddLiveb_pressed"]
+[connection signal="pressed" from="DebugButtons/SubLiveb" to="." method="_on_SubLiveb_pressed"]
