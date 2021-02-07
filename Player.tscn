@@ -1,52 +1,71 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://PNG/playerShip1_blue.png" type="Texture" id=2]
-[ext_resource path="res://PNG/playerShip1_green.png" type="Texture" id=3]
-[ext_resource path="res://PNG/Lasers/laserBlue08.png" type="Texture" id=4]
-[ext_resource path="res://PNG/Lasers/laserBlue09.png" type="Texture" id=5]
-[ext_resource path="res://PNG/Lasers/laserBlue10.png" type="Texture" id=6]
-[ext_resource path="res://PNG/Lasers/laserBlue11.png" type="Texture" id=7]
-[ext_resource path="res://PNG/playerShip1_red.png" type="Texture" id=8]
+[ext_resource path="res://PNG/ship_outline.png" type="Texture" id=2]
+[ext_resource path="res://PNG/ship_left.png" type="Texture" id=3]
+[ext_resource path="res://PNG/explosion9.png" type="Texture" id=4]
+[ext_resource path="res://PNG/explosion12.png" type="Texture" id=5]
+[ext_resource path="res://PNG/explosion10.png" type="Texture" id=6]
+[ext_resource path="res://PNG/explosion8.png" type="Texture" id=7]
+[ext_resource path="res://PNG/ship_right.png" type="Texture" id=8]
+[ext_resource path="res://Bullet.tscn" type="PackedScene" id=9]
+[ext_resource path="res://PNG/ship_front.png" type="Texture" id=10]
+[ext_resource path="res://PNG/explosion11.png" type="Texture" id=11]
+[ext_resource path="res://PNG/explosion1.png" type="Texture" id=12]
+[ext_resource path="res://PNG/explosion3.png" type="Texture" id=13]
+[ext_resource path="res://PNG/explosion2.png" type="Texture" id=14]
+[ext_resource path="res://PNG/explosion4.png" type="Texture" id=15]
+[ext_resource path="res://PNG/explosion5.png" type="Texture" id=16]
+[ext_resource path="res://PNG/explosion6.png" type="Texture" id=17]
+[ext_resource path="res://PNG/explosion7.png" type="Texture" id=18]
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 2 ), ExtResource( 8 ) ],
+"frames": [ ExtResource( 10 ), ExtResource( 2 ), ExtResource( 10 ) ],
 "loop": true,
 "name": "Ghost",
-"speed": 10.0
+"speed": 12.0
 }, {
-"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), null ],
+"frames": [ ExtResource( 12 ), ExtResource( 14 ), ExtResource( 13 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 11 ), ExtResource( 5 ), null ],
 "loop": true,
 "name": "Explosion",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
-"loop": false,
-"name": "Lean",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 2 ) ],
+"frames": [ ExtResource( 10 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": false,
+"name": "Left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "Right",
+"speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 43.4439, 20.7699 )
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 8.57058, 11.9455 )
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"Player",
+]]
+collision_layer = 2147483649
 collision_mask = 2
 script = ExtResource( 1 )
+Bullet = ExtResource( 9 )
 
 [node name="Ship" type="AnimatedSprite" parent="."]
-frames = SubResource( 2 )
-animation = "Idle"
+frames = SubResource( 1 )
+animation = "Right"
 playing = true
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2( -1.41418, 4.94977 )
-shape = SubResource( 1 )
+position = Vector2( 0.198643, 1.60601 )
+shape = SubResource( 2 )
 
 [node name="RespawnTimer" type="Timer" parent="."]
 wait_time = 2.5

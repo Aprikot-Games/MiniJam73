@@ -14,6 +14,7 @@ var gLives_n = 0
 var gLives = []
 var gLevel = START_LEVEL
 var g_current_level = null
+var g_score = 0
 
 func _ready():
 	$UI/Msg.text = ""
@@ -69,7 +70,7 @@ func add_live():
 
 #---------   USER INTERFACE
 const LIVE_MARGIN = Vector2(10, 10)
-const LIVE_SIZE = Vector2(10, 10)
+const LIVE_SIZE = Vector2(16, 16)
 
 func position_lives():
 	for i in range(0, START_LIVES):
@@ -91,18 +92,33 @@ func init():
 	generate_lives()
 	position_lives()
 	show_general_UI(true)
+	show_menu_UI(false)
 	g_current_level = Level.instance()
 	add_child(g_current_level)
 	g_current_level.connect("lose_live", self, "sub_live")
+	update_score()
 
 func deinit():
 	show_general_UI(false)
+	show_menu_UI(true)
 	destroy_lives()
 	g_current_level.queue_free()
 
 # Hide or show the general UI, not considering notifications
 func show_general_UI(val):
+	if val == true:
+		$UI/Score.show()
+	else:
+		$UI/Score.hide()
 	show_lives(val)
+
+func show_menu_UI(val):
+	if val == true:
+		$UI/StartButton.show()
+		$UI/Background.show()
+	else:
+		$UI/StartButton.hide()
+		$UI/Background.hide()
 
 func show_lives(val):
 	for live in gLives:
@@ -113,6 +129,14 @@ func show_lives(val):
 
 func set_initial_values():
 	gLives_n = START_LIVES
+	g_score = 0
+
+func add_score():
+	g_score += 1
+	update_score()
+
+func update_score():
+	$UI/Score.text = str(g_score)
 
 func _on_Timer_timeout():
 	set_state(state.START)
@@ -140,3 +164,6 @@ func _on_SubLiveb_pressed():
 
 func _on_AddLiveb_pressed():
 	add_live()
+
+func _on_StartButton_pressed():
+	set_state(state.SHOOT)

@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+export (PackedScene) var Bullet
+
 signal player_lose_live
 
 enum state {MOVE, GHOST}
@@ -7,7 +9,7 @@ enum state {MOVE, GHOST}
 var g_current_state = state.MOVE
 var g_motion = Vector2.ZERO
 
-const ACCELERATION = 1000
+const ACCELERATION = 1500
 const MAX_SPEED = 200
 const FRICTION = 0.3
 
@@ -26,10 +28,10 @@ func _physics_process(delta):
 		g_motion.x = clamp(g_motion.x, -MAX_SPEED, MAX_SPEED)
 		# Change the sprite animation according to the input direction
 		if x_input < 0 and g_current_state == state.MOVE:
-			$Ship.animation = "Lean"
+			$Ship.animation = "Left"
 		if x_input > 0 and g_current_state == state.MOVE:
 			#$Ship.transform = -1
-			$Ship.animation = "Lean"
+			$Ship.animation = "Right"
 	elif x_input == 0:
 		if g_current_state == state.MOVE:
 			$Ship.animation = "Idle"
@@ -40,16 +42,37 @@ func _physics_process(delta):
 		g_motion.y = clamp(g_motion.y, -MAX_SPEED, MAX_SPEED)
 	elif y_input == 0:
 		g_motion.y = lerp(g_motion.y, 0, FRICTION)
-	g_motion = move_and_slide(g_motion)
+	g_motion = move_and_slide(g_motion, Vector2(0,0), false, 4, 0.785398, false)
+	position.x = clamp(position.x, 0, get_viewport().size.x/2)
+	position.y = clamp(position.y, 0, get_viewport().size.y/2)
 	
-	if  get_slide_count() > 0 and g_current_state == state.MOVE:
+	if  get_slide_count() > 0:
+		damage()
+	
+	if Input.is_action_just_pressed("ui_shoot"):
+		shoot()
+
+func damage():
+	if g_current_state == state.MOVE:
 		g_current_state = state.GHOST
 		$RespawnTimer.start()
-		$CollisionShape.disabled = true
+		$CollisionShape.set_deferred("disabled", true)
 		$Ship.play("Ghost")
 		emit_signal("player_lose_live")
+
+func shoot():
+	var left_bullet = Bullet.instance()
+	var right_bullet = Bullet.instance()
+	owner.add_child(left_bullet)
+	owner.add_child(right_bullet)
+	left_bullet.transform = self.global_transform
+	right_bullet.transform = self.global_transform
+	left_bullet.position.y -= 15
+	right_bullet.position.y -= 15
+	left_bullet.position.x -= 6
+	right_bullet.position.x += 6
 
 func _on_RespawnTimer_timeout():
 	g_current_state = state.MOVE
 	$Ship.animation = "Idle"
-	$CollisionShape.disabled = false
+	$CollisionShape.set_deferred("disabled", false)

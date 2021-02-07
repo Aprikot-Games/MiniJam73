@@ -1,21 +1,39 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Level.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Enemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://PNG/backgroundParallax.png" type="Texture" id=4]
+[ext_resource path="res://ParallaxBackground.gd" type="Script" id=5]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 176, 0, 0, 0, 0, 0, 176, 0 )
+}
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 1 )
 Enemy = ExtResource( 3 )
 
-[node name="Enemy" parent="." instance=ExtResource( 3 )]
-position = Vector2( 88, 32 )
-rotation = -0.0177552
-scale = Vector2( 1, 1 )
-
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 91.946, 271.893 )
-scale = Vector2( 0.3, 0.3 )
 
 [node name="SpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource( 1 )
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+script = ExtResource( 5 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 0, 640 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2( 90, 160 )
+texture = ExtResource( 4 )
 [connection signal="player_lose_live" from="Player" to="." method="_on_Player_player_lose_live"]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
