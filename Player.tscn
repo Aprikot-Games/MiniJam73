@@ -1,15 +1,12 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://PNG/ship_outline.png" type="Texture" id=2]
-[ext_resource path="res://PNG/ship_left.png" type="Texture" id=3]
 [ext_resource path="res://PNG/explosion9.png" type="Texture" id=4]
 [ext_resource path="res://PNG/explosion12.png" type="Texture" id=5]
 [ext_resource path="res://PNG/explosion10.png" type="Texture" id=6]
 [ext_resource path="res://PNG/explosion8.png" type="Texture" id=7]
-[ext_resource path="res://PNG/ship_right.png" type="Texture" id=8]
 [ext_resource path="res://Bullet.tscn" type="PackedScene" id=9]
-[ext_resource path="res://PNG/ship_front.png" type="Texture" id=10]
 [ext_resource path="res://PNG/explosion11.png" type="Texture" id=11]
 [ext_resource path="res://PNG/explosion1.png" type="Texture" id=12]
 [ext_resource path="res://PNG/explosion3.png" type="Texture" id=13]
@@ -18,37 +15,41 @@
 [ext_resource path="res://PNG/explosion5.png" type="Texture" id=16]
 [ext_resource path="res://PNG/explosion6.png" type="Texture" id=17]
 [ext_resource path="res://PNG/explosion7.png" type="Texture" id=18]
+[ext_resource path="res://SFX/laser.wav" type="AudioStream" id=19]
+[ext_resource path="res://SFX/alert.wav" type="AudioStream" id=20]
+[ext_resource path="res://PNG/ship_outline2.png" type="Texture" id=21]
+[ext_resource path="res://PNG/ship_outline3.png" type="Texture" id=22]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 10 ), ExtResource( 2 ), ExtResource( 10 ) ],
+"frames": [ ExtResource( 2 ), null, ExtResource( 2 ) ],
 "loop": true,
 "name": "Ghost",
 "speed": 12.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 22 ) ],
+"loop": true,
+"name": "Left",
+"speed": 10.0
 }, {
 "frames": [ ExtResource( 12 ), ExtResource( 14 ), ExtResource( 13 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 11 ), ExtResource( 5 ), null ],
 "loop": true,
 "name": "Explosion",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 10 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 3 ) ],
-"loop": false,
-"name": "Left",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 8 ) ],
+"frames": [ ExtResource( 21 ) ],
 "loop": true,
 "name": "Right",
-"speed": 5.0
+"speed": 10.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 8.57058, 11.9455 )
+extents = Vector2( 7.97421, 8.97182 )
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Player",
@@ -60,14 +61,20 @@ Bullet = ExtResource( 9 )
 
 [node name="Ship" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
-animation = "Right"
+animation = "Idle"
 playing = true
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2( 0.198643, 1.60601 )
+position = Vector2( 0.0113528, 2.91703 )
 shape = SubResource( 2 )
 
 [node name="RespawnTimer" type="Timer" parent="."]
 wait_time = 2.5
 one_shot = true
+
+[node name="Shoot" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 19 )
+
+[node name="Alert" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 20 )
 [connection signal="timeout" from="RespawnTimer" to="." method="_on_RespawnTimer_timeout"]

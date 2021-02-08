@@ -1,6 +1,7 @@
 extends ParallaxBackground
 
-
+const BASE_SCROLL_SPEED = 75
+var scroll_speed = BASE_SCROLL_SPEED
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -11,7 +12,7 @@ func _ready():
 	pass # Replace with function body.
 
 func _process(delta):
-	scroll_offset.y += 3500 * delta
+	scroll_offset.y += scroll_speed * delta
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

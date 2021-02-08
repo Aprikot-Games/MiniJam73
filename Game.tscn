@@ -1,9 +1,26 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Live.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Level.tscn" type="PackedScene" id=3]
-[ext_resource path="res://PNG/backgroundParallax.png" type="Texture" id=4]
+[ext_resource path="res://PNG/portada.png" type="Texture" id=4]
+[ext_resource path="res://SFX/ouroboros.ogg" type="AudioStream" id=5]
+[ext_resource path="res://Font/Symtext.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://SFX/gameover.wav" type="AudioStream" id=7]
+[ext_resource path="res://PNG/button2.png" type="Texture" id=8]
+[ext_resource path="res://PNG/button1.png" type="Texture" id=9]
+
+[sub_resource type="DynamicFont" id=1]
+size = 25
+outline_size = 2
+outline_color = Color( 0.192157, 0.0823529, 0.215686, 1 )
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 12
+outline_size = 1
+outline_color = Color( 0.192157, 0.0823529, 0.215686, 1 )
+font_data = ExtResource( 6 )
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -13,17 +30,20 @@ Level = ExtResource( 3 )
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Background" type="Sprite" parent="UI"]
-position = Vector2( 94.8316, 114.229 )
-scale = Vector2( 1.59779, 1 )
+position = Vector2( 89.9517, 160.216 )
 texture = ExtResource( 4 )
 
 [node name="Msg" type="Label" parent="UI"]
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-margin_left = -166.706
-margin_top = 88.0309
-margin_right = 168.294
-margin_bottom = 102.031
+anchor_bottom = 0.5
+margin_left = -165.5
+margin_top = -67.0
+margin_right = 169.5
+margin_bottom = -29.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.698039, 0.819608, 0.345098, 1 )
 text = "GAME OVER"
 align = 1
 __meta__ = {
@@ -35,27 +55,30 @@ anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -40.0
 margin_bottom = 14.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.698039, 0.819608, 0.345098, 1 )
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="StartButton" type="Button" parent="UI"]
+[node name="StartButton" type="TextureButton" parent="UI"]
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -55.0
-margin_top = 66.0443
-margin_right = 55.0
-margin_bottom = 92.0443
-text = "Start"
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -73.0
+margin_right = 41.0
+margin_bottom = -28.0
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="OverTimer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 5.0
 one_shot = true
 
 [node name="NotifyTimer" type="Timer" parent="."]
@@ -121,6 +144,12 @@ text = "Sub"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="GameOverSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
 [connection signal="pressed" from="UI/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="timeout" from="OverTimer" to="." method="_on_Timer_timeout"]
 [connection signal="timeout" from="NotifyTimer" to="." method="_on_NotifyTimer_timeout"]

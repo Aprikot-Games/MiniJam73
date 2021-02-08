@@ -3,7 +3,7 @@ extends Node2D
 signal lose_live
 
 export (PackedScene) var Enemy
-var mobCounter = 0
+var spawn_timeout = 1
 
 func _ready():
 	randomize()
@@ -25,3 +25,8 @@ func _on_SpawnTimer_timeout():
 
 func add_score():
 	get_node("..").add_score()
+
+func _on_DifficultyTimer_timeout():
+	spawn_timeout = spawn_timeout / 1.5
+	$ParallaxBackground.scroll_speed *= 1.5
+	$SpawnTimer.wait_time = spawn_timeout

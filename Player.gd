@@ -11,6 +11,7 @@ var g_motion = Vector2.ZERO
 
 const ACCELERATION = 1500
 const MAX_SPEED = 200
+const BRAKE_SPEED = 80
 const FRICTION = 0.3
 
 # Called when the node enters the scene tree for the first time.
@@ -25,21 +26,27 @@ func _physics_process(delta):
 	if x_input != 0:
 		# Move the damn thing
 		g_motion.x += x_input * ACCELERATION * delta
-		g_motion.x = clamp(g_motion.x, -MAX_SPEED, MAX_SPEED)
+		if Input.is_action_pressed("ui_brake"):
+			g_motion.x = clamp(g_motion.x, -BRAKE_SPEED, BRAKE_SPEED)
+		else:
+			g_motion.x = clamp(g_motion.x, -MAX_SPEED, MAX_SPEED)
 		# Change the sprite animation according to the input direction
 		if x_input < 0 and g_current_state == state.MOVE:
-			$Ship.animation = "Left"
+			$Ship.play("Left")
 		if x_input > 0 and g_current_state == state.MOVE:
 			#$Ship.transform = -1
-			$Ship.animation = "Right"
+			$Ship.play("Right")
 	elif x_input == 0:
 		if g_current_state == state.MOVE:
-			$Ship.animation = "Idle"
+			$Ship.play("Idle")
 		g_motion.x = lerp(g_motion.x, 0, FRICTION)
 	if y_input != 0:
 		# Move the damn thing
 		g_motion.y += y_input * ACCELERATION * delta
-		g_motion.y = clamp(g_motion.y, -MAX_SPEED, MAX_SPEED)
+		if Input.is_action_pressed("ui_brake"):
+			g_motion.y = clamp(g_motion.y, -BRAKE_SPEED, BRAKE_SPEED)
+		else:
+			g_motion.y = clamp(g_motion.y, -MAX_SPEED, MAX_SPEED)
 	elif y_input == 0:
 		g_motion.y = lerp(g_motion.y, 0, FRICTION)
 	g_motion = move_and_slide(g_motion, Vector2(0,0), false, 4, 0.785398, false)
@@ -55,12 +62,14 @@ func _physics_process(delta):
 func damage():
 	if g_current_state == state.MOVE:
 		g_current_state = state.GHOST
+		$Alert.play()
 		$RespawnTimer.start()
 		$CollisionShape.set_deferred("disabled", true)
 		$Ship.play("Ghost")
 		emit_signal("player_lose_live")
 
 func shoot():
+	$Shoot.play()
 	var left_bullet = Bullet.instance()
 	var right_bullet = Bullet.instance()
 	owner.add_child(left_bullet)
@@ -74,5 +83,6 @@ func shoot():
 
 func _on_RespawnTimer_timeout():
 	g_current_state = state.MOVE
+	$Alert.stop()
 	$Ship.animation = "Idle"
 	$CollisionShape.set_deferred("disabled", false)

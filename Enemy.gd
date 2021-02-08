@@ -8,12 +8,13 @@ var min_speed = 20
 var max_speed = 60
 
 func _ready():
-	pass # Replace with function body.
+	$Ship.play("Idle")
 
 func _on_Enemy_body_entered(body):
 	damage()
 
 func damage():
+	$Boom.play()
 	g_current_state = state.DEAD
 	var parent = get_node("..")
 	parent.add_score()
@@ -35,5 +36,5 @@ func _on_ShootCD_timeout():
 	shoot()
 
 func _on_VisibilityNotifier2D_screen_exited():
-	get_node("..").mobCounter -= 1
+	#get_node("..").mobCounter -= 1
 	queue_free()

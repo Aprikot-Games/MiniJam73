@@ -31,15 +31,17 @@ func set_state(new_state):
 		# Can't set existing states
 		return
 	if new_state == state.START:
-		print("Setting Start")
-		deinit()
+		get_tree().reload_current_scene()
+		#deinit()
 	elif new_state == state.SHOOT:
 		if gGame_state != state.START:
 			# Must wait for START state
 			return
-		print("Setting SHOOT")
+		$Music.play()
 		init()
 	elif new_state == state.OVER:
+		$Music.stop()
+		$GameOverSFX.play()
 		show_general_UI(false)
 		set_notification("GAME OVER")
 		$OverTimer.start()
@@ -50,7 +52,7 @@ func set_state(new_state):
 func generate_lives():
 	for i in range(0, gLives_n):
 		var live = Live.instance()
-		add_child(live)
+		$UI.add_child(live)
 		gLives.append(live)
 
 func destroy_lives():
